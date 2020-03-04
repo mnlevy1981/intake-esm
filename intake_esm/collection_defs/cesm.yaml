@@ -14,6 +14,8 @@ collections:
     - file_fullpath
     - file_basename
     - ctrl_branch_year
+    - ctrl_experiment
+    - ctrl_member_id
     - year_offset
     - sequence_order
     - grid

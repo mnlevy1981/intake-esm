@@ -63,9 +63,10 @@ class CESMCollection(Collection):
 
                         # Ensure that filename conforms to expected pattern
                         if datestr_nc != f'{datestr}.nc':
-                            print(
-                                f'Filename : {file_basename} does not conform to expected pattern'
-                            )
+                            pass
+#                            print(
+#                                f'Filename : {file_basename} does not conform to expected pattern'
+#                            )
 
                         else:
                             if component == 'ice':
@@ -97,7 +98,19 @@ class CESMCollection(Collection):
             case = member_attrs['case']
 
             if 'member_id' not in member_attrs:
-                input_attrs_base.update({'member_id': member_id})
+                if 'ctrl_member_id' in member_attrs:
+                    input_attrs_base.update({'member_id': member_attrs['ctrl_member_id']})
+                else:
+                    input_attrs_base.update({'member_id': member_id})
+
+            if 'ctrl_member_id' not in member_attrs:
+                input_attrs_base.update({'ctrl_member_id': -2147483647})
+
+            if 'ctrl_branch_year' not in member_attrs:
+                input_attrs_base.update({'ctrl_branch_year': -2147483647})
+
+            if 'ctrl_experiment' not in member_attrs:
+                input_attrs_base.update({'ctrl_experiment': "No control experiment"})
 
             if 'sequence_order' not in member_attrs:
                 input_attrs_base.update({'sequence_order': 0})

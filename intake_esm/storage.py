@@ -37,6 +37,7 @@ class StorageResource(object):
         self.type = loc_type
         self.file_extension = file_extension
         self.exclude_patterns = exclude_patterns
+        self._posix_paths = dict()
         self.filelist = self._list_files()
 
     def _list_files(self):
@@ -94,14 +95,17 @@ class StorageResource(object):
         """Get a list of files"""
         try:
 
-            w = os.walk(self.urlpath, followlinks=True)
+            if self.urlpath in self._posix_paths:
+              return self._posix_paths[self.urlpath]
 
+            w = os.walk(self.urlpath, followlinks=True)
             filelist = []
 
             for root, dirs, files in w:
                 filelist.extend(
                     [os.path.join(root, f) for f in files if f.endswith(self.file_extension)]
                 )
+            self._posix_paths[self.urlpath] = filelist
             return filelist
         except Exception as e:
             warn(
